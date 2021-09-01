@@ -8,6 +8,7 @@ import java.util.Vector;
 class PI {
 	static Object obj = new Object();
 	static float pi = 0;
+
 	static int PUERTO = 30000;
 	static String SERVIDOR = "localhost";
 
@@ -35,6 +36,8 @@ class PI {
 				entrada.close();
 				salida.close();
 				conexion.close();
+				
+				System.out.println("[Conexión finalizada]");
 			}
 			catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -56,6 +59,7 @@ class PI {
 			//algoritmo 2
 			System.out.println("[Servidor Iniciado]");
 			ServerSocket servidor = new ServerSocket (PUERTO);
+			System.out.println("[Servidor Escuchando]");
 
 			Vector <Worker> v = new Vector <Worker> (4);
 
@@ -70,6 +74,7 @@ class PI {
 			}
 
 			System.out.println("[PI] - >" + pi);
+			System.out.println("[Servidor RIP]");
 
 		}
 
@@ -93,7 +98,7 @@ class PI {
 
 			float suma = 0.0f;
 			
-			for (int i = 0; i < 1e7; i++) {
+			for (int i = 0; i < 1e6; i++) {
 				suma += 4.0 / (8 * i + 2 * (nodo - 2 ) + 3);
 			}
 
