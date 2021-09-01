@@ -1,4 +1,7 @@
 import java.net.Socket;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 class PI {
 	static Object obj = new Object();
@@ -13,6 +16,25 @@ class PI {
 
 		public void run () {
 			//algoritmo 1
+			try {
+				System.out.println("[Nueva conexión iniciada]");
+
+				DataInputStream entrada = new DataInputStream(conexion.getInputStream());
+				DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
+
+				float suma = entrada.readFloat();
+
+				synchronized (obj) {
+					pi += suma;
+				}
+
+				entrada.close();
+				salida.close();
+				conexion.close();
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 
 	}
