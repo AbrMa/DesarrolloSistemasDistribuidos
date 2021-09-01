@@ -1,7 +1,9 @@
 import java.net.Socket;
+import java.net.ServerSocket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Vector;
 
 class PI {
 	static Object obj = new Object();
@@ -50,6 +52,25 @@ class PI {
 
 		if (nodo == 0) {
 			//algoritmo 2
+			System.out.println("[Servidor Iniciado]");
+
+			final int PUERTO = 30000;
+			ServerSocket servidor = new ServerSocket (PUERTO);
+
+			Vector <Worker> v = new Vector <Worker> (4);
+
+			for (int i = 0; i < 4; i++) {
+				Socket conexion = servidor.accept();
+				v.insertElementAt(new Worker(conexion), i);
+				v.get(i).start();
+			}
+
+			for (int i = 0; i < 4; i++) {
+				v.get(i).join();
+			}
+
+			System.out.println("[PI] - >" + pi);
+
 		}
 
 		else {
