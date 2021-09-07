@@ -1,5 +1,8 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 class Token {
 	static DataInputStream entrada;
 	static DataOutputStream salida;
@@ -11,6 +14,17 @@ class Token {
 	static class Worker extends Thread {
 		public void run () {
 			//algoritmo 1
+			try {
+				final int PUERTO = 20000;
+				ServerSocket servidor;
+				servidor = new ServerSocket(PUERTO + nodo);
+
+				Socket conexion = servidor.accept();
+				DataInputStream entrada = new DataInputStream(conexion.getInputStream());
+			}
+			catch (Exception e) {
+				System.out.println(e.getMessage());
+			}	
 		}
 	}
 
