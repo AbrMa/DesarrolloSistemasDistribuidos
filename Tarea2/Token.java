@@ -15,12 +15,15 @@ class Token {
 	static class Worker extends Thread {
 		public void run () {
 			//algoritmo 1
+			System.out.println("[Servidor Nodo] -> " + nodo);
+			System.out.println("[Servidor IP] -> " + ip);
+			System.out.println("[Servidor Puerto] -> " + (PUERTO + nodo));
 			try {
 				ServerSocket servidor;
 				servidor = new ServerSocket(PUERTO + nodo);
-
 				Socket conexion = servidor.accept();
-				DataInputStream entrada = new DataInputStream(conexion.getInputStream());
+				System.out.println ("[Conexión establecida]");
+				entrada = new DataInputStream(conexion.getInputStream());
 			}
 			catch (Exception e) {
 				System.out.println(e.getMessage());
@@ -43,6 +46,8 @@ class Token {
 		boolean conectado = false;
 		int nuevoPuerto = PUERTO + (nodo + 1) % 4;
 
+		System.out.println("[Destino Puerto] -> " + nuevoPuerto); 
+		System.out.println("[Destino IP] -> " + ip); 
 		while (!conectado) {
 			try {
 				conexion = new Socket(ip, nuevoPuerto); 
@@ -54,7 +59,7 @@ class Token {
 			}
 		}
 
-		DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
+		salida = new DataOutputStream(conexion.getOutputStream());
 		w.join();
 
 		while (true) {
