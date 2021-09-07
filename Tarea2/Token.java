@@ -10,12 +10,12 @@ class Token {
 	static String ip;
 	static int nodo;
 	static long token;
+	static final int PUERTO = 20000;
 
 	static class Worker extends Thread {
 		public void run () {
 			//algoritmo 1
 			try {
-				final int PUERTO = 20000;
 				ServerSocket servidor;
 				servidor = new ServerSocket(PUERTO + nodo);
 
@@ -36,5 +36,52 @@ class Token {
 		nodo = Integer.valueOf(args[0]);
 		ip = args[1];
 		//algoritmo 2
+		Worker w = new Worker();
+		w.start();
+		
+		Socket conexion = null;
+		boolean conectado = false;
+		int nuevoPuerto = PUERTO + (nodo + 1) % 4;
+
+		while (!conectado) {
+			try {
+				conexion = new Socket(ip, nuevoPuerto); 
+				conectado = true; // de manera similar al break, la siguiente iteración del ciclo no va a ser ejecutada
+			}
+			catch (Exception e){
+				final int MS = 500;
+				Thread.sleep(MS);
+			}
+		}
+
+		DataOutputStream salida = new DataOutputStream(conexion.getOutputStream());
+		w.join();
+
+		while (true) {
+			if (nodo == 0) {
+				if (inicio == true) {
+					inicio = false;
+					token = 1;
+				}
+				else {
+					token = entrada.readLong();
+					token++;
+					System.out.println("[Nodo] -> " + nodo);
+					System.out.println("[Token] -> " + token);
+				}
+			}
+			else {
+				token = entrada.readLong();
+				token++;
+				System.out.println("[Nodo] -> " + nodo);
+				System.out.println("[Token] -> " + token);
+			}
+
+			if (nodo == 0 && token >= 1000) {
+				break;
+			}
+
+			salida.writeLong(token);
+		}
 	}
 }
